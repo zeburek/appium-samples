@@ -11,7 +11,7 @@ var filepath = 'outputs/';
 var apiToken = 'xyz'; // your API token from https://appetize.io/docs#request-api-token
 var deviceType = 'iphone5s'; // iphone4s, iphone5s, iphone6s, iphone6splus, iphone7, iphone7plus, ipadair2
 var publicKey = 'w6w6ng97e5ngd5kpwtg5d7d4u8'; // replace with your own publicKey after uploading through website or API
-var osVersion = '9.3'; // only 9.3 supported currently
+var osVersion = '9.3'; // 9.2 also supported
 var proxy = 'intercept'; // false for no proxy, or specify your own with http://proxy-example.com:port
 
 var driver = wd.remote('https://' + apiToken + '@appium.appetize.io/wd/hub', 'promiseChain');
@@ -26,7 +26,7 @@ driver.init({
 .then(takeScreenshot)
 .then(function() {
     console.log('tapping element');
-    return driver.elementByXPath('//UIAElement[@name="Random article Wikipedia"]').tap().delay(2000);
+    return driver.elementByXPath('//UIAButton[@name="Saved"]').tap().delay(2000);
 })
 .then(takeScreenshot)
 .then(function() {
