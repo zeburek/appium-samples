@@ -34,24 +34,21 @@ driver.init({
     return driver.quit();
 })
 .then(function() {
-    if (proxy === 'intercept') {
-        console.log('Getting HAR file');
+    var timeStamp = Date.now();
 
-        var url = 'https://api.appetize.io/v1/networkCapture/appiumId/' + driver.sessionID;
-        console.log(url);
-
-        request.get(url, function(err, response, body) {
-            if (err) throw err;
-
-            var har = JSON.parse(body);
-            console.log('Har has ' + har.log.entries.length + ' entries');
-
-            // write file
-            var filename = 'appetize-' + deviceType + '-' + osVersion + '-' + publicKey + '-har-' + Date.now() + '.json';
-            console.log('writing file to ' + filename);
-            fs.writeFileSync(filepath + filename, JSON.stringify(har, null, 2));
-        });
+    if (proxy == 'intercept') {
+        downloadFile('https://api.appetize.io/v1/networkCapture/appiumId/' + driver.sessionID,
+            filepath + 'appetize-' + deviceType + '-' + osVersion + '-' + publicKey + '-har-' + timeStamp + '.har',
+            'networkCapture');
     }
+
+    downloadFile('https://api.appetize.io/v1/debugLog/appiumId/' + driver.sessionID,
+        filepath + 'appetize-' + deviceType + '-' + osVersion + '-' + publicKey + '-debugLog-' + timeStamp + '.txt',
+        'debugLog');
+
+    downloadFile('https://api.appetize.io/v1/screenRecording/appiumId/' + driver.sessionID,
+        filepath + 'appetize-' + deviceType + '-' + osVersion + '-' + publicKey + '-screenRecording-' + timeStamp + '.mp4',
+        'screenRecording');
 })
 .catch(function(error) {
     console.log('Error');
@@ -67,4 +64,31 @@ function takeScreenshot() {
             console.log('writing file to ' + filename);
             fs.writeFileSync(filepath + filename, data, 'base64');
         });
+}
+
+function downloadFile(url, filename, type) {
+    console.log('Downloading ' + type + ' file: ' + url);
+
+    request({
+        url: url,
+        encoding: type === 'screenRecording' ? null : undefined
+    }, function(err, response, body) {
+        if (err) throw err;
+
+        if (response.statusCode !== 200) {
+            console.log('File download failed with ' + response.statusCode);
+            return;
+        }
+
+        if (type === 'networkCapture') {
+            var har = JSON.parse(body);
+            console.log('HAR has ' + har.log.entries.length + ' entries');
+        }
+        else if (type === 'debugLog') {
+            console.log('Debug log has ' + body.split('\n').length + ' lines');
+        }
+
+        console.log('Writing ' + type + ' to ' + filename);
+        fs.writeFileSync(filename, body);
+    });
 }
