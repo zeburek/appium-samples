@@ -1,33 +1,33 @@
 'use strict';
 
 var wd = require('wd');
-var request = require('request');
 var Promise = require('bluebird'); // jshint ignore:line
 var fs = require('fs');
+var request = require('request');
 
 var filepath = 'outputs/';
-
+fs.mkdir(filepath, function(ignored) {});
 
 var apiToken = 'xyz'; // your API token from https://appetize.io/docs#request-api-token
-var deviceType = 'iphone5s'; // iphone4s, iphone5s, iphone6s, iphone6splus, iphone7, iphone7plus, ipadair2
-var publicKey = 'w6w6ng97e5ngd5kpwtg5d7d4u8'; // replace with your own publicKey after uploading through website or API
-var osVersion = '9.3'; // 9.2 also supported
+var deviceType = 'nexus5'; // nexus5, nexus7, nexus9
+var publicKey = '509eq0debke2bgjp3xazvnwqkm'; // replace with your own publicKey after uploading through website or API
+var osVersion = '7.0'; // 4.4, 5.1, 6.0, 7.0 supported
 var proxy = 'intercept'; // false for no proxy, or specify your own with http://proxy-example.com:port
 
 var driver = wd.remote('https://' + apiToken + '@appium.appetize.io/wd/hub', 'promiseChain');
+
 
 console.log('starting session');
 driver.init({
     device: deviceType,
     publicKey: publicKey,
     osVersion: osVersion,
-    proxy: proxy,
-    automationName: 'Appium'
+    proxy: proxy
 }).delay(5000)
 .then(takeScreenshot)
 .then(function() {
     console.log('tapping element');
-    return driver.elementByXPath('//UIAButton[@name="Saved"]').tap().delay(2000);
+    return driver.elementByXPath('//android.widget.TextView[@text="My lists"]').tap().delay(2000);
 })
 .then(takeScreenshot)
 .then(function() {
@@ -52,6 +52,7 @@ driver.init({
         'screenRecording');
 })
 .catch(function(error) {
+    console.log('Error');
     console.log(error);
 });
 
