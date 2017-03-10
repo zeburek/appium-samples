@@ -13,6 +13,10 @@ var deviceType = 'iphone5s'; // iphone4s, iphone5s, iphone6s, iphone6splus, ipho
 var publicKey = 'p7cc48c1k8pr1qvnz6r3quu098'; // replace with your own publicKey after uploading through website or API
 var osVersion = '10.2'; // also supports 10.1, 10.0
 var proxy = 'intercept'; // false for no proxy, or specify your own with http://proxy-example.com:port
+var params = {
+    hello: 'world',
+    userId: 123
+}; // optional data to pass to app at launch
 
 var driver = wd.remote('https://' + apiToken + '@appium.appetize.io/wd/hub', 'promiseChain');
 
@@ -22,6 +26,7 @@ driver.init({
     publicKey: publicKey,
     osVersion: osVersion,
     proxy: proxy,
+    params: params,
     automationName: 'XCUITest'
 }).delay(5000)
 .then(takeScreenshot)

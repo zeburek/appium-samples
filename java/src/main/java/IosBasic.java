@@ -3,6 +3,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,11 +23,16 @@ public class IosBasic {
     public void run() throws Exception {
         new File(outputDirectory).mkdir();
 
+        JSONObject params = new JSONObject(); // will be passed to app at launch
+        params.put("hello", "world");
+        params.put("userId", 123);
+
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("device", deviceType);
         capabilities.setCapability("publicKey", publicKey);
         capabilities.setCapability("osVersion", osVersion);
         capabilities.setCapability("proxy", proxy);
+        capabilities.setCapability("params", params.toString());
 
         URL remote = new URL("https://" + apiToken + "@appium.appetize.io/wd/hub");
         AppiumDriver driver = new AndroidDriver(remote, capabilities);

@@ -13,6 +13,10 @@ var deviceType = 'nexus5'; // nexus5, nexus7, nexus9
 var publicKey = '509eq0debke2bgjp3xazvnwqkm'; // replace with your own publicKey after uploading through website or API
 var osVersion = '7.0'; // 4.4, 5.1, 6.0, 7.0 supported
 var proxy = 'intercept'; // false for no proxy, or specify your own with http://proxy-example.com:port
+var params = {
+    hello: 'world',
+    userId: 123
+}; // optional data to pass to app at launch
 
 var driver = wd.remote('https://' + apiToken + '@appium.appetize.io/wd/hub', 'promiseChain');
 
@@ -22,7 +26,8 @@ driver.init({
     device: deviceType,
     publicKey: publicKey,
     osVersion: osVersion,
-    proxy: proxy
+    proxy: proxy,
+    params: params
 }).delay(5000)
 .then(takeScreenshot)
 .then(function() {
