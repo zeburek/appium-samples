@@ -17,6 +17,7 @@ var params = {
     hello: 'world',
     userId: 123
 }; // optional data to pass to app at launch
+var automationName = 'Appium'; // XCUITest supported on 9.3
 
 var driver = wd.remote('https://' + apiToken + '@appium.appetize.io/wd/hub', 'promiseChain');
 
@@ -27,12 +28,16 @@ driver.init({
     osVersion: osVersion,
     proxy: proxy,
     params: params,
-    automationName: 'Appium'
+    automationName: automationName
 }).delay(5000)
 .then(takeScreenshot)
 .then(function() {
     console.log('tapping element');
-    return driver.elementByXPath('//UIAButton[@name="Saved"]').tap().delay(2000);
+    if (automationName === 'XCUITest') {
+        return driver.elementByXPath('//XCUIElementTypeButton[@name="Saved"]').click().delay(2000);
+    } else {
+        return driver.elementByXPath('//UIAButton[@name="Saved"]').tap().delay(2000);;
+    }
 })
 .then(takeScreenshot)
 .then(function() {
