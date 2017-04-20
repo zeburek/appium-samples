@@ -11,7 +11,7 @@ fs.mkdir(filepath, function(ignored) {});
 var apiToken = 'xyz'; // your API token from https://appetize.io/docs#request-api-token
 var deviceType = 'iphone5s'; // iphone4s, iphone5s, iphone6s, iphone6splus, iphone7, iphone7plus, ipadair2
 var publicKey = 'p7cc48c1k8pr1qvnz6r3quu098'; // replace with your own publicKey after uploading through website or API
-var osVersion = '10.2'; // also supports 10.1, 10.0
+var osVersion = '10.3'; // also supports 10.2, 10.1, 10.0
 var proxy = 'intercept'; // false for no proxy, or specify your own with http://proxy-example.com:port
 var params = {
     hello: 'world',
